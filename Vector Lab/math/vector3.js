@@ -83,7 +83,8 @@ var Vector3 = function(x, y, z) {
   this.normalized = function() {
     // todo - return a new vector instance that is a normalized clone of 'this' vector
     // This should NOT change the values of this.x, this.y, and this.z
-    return null; // Should return a new vector that is not this
+    // Should return a new vector that is not this
+    return this.clone().normalize();
   };
 
   this.normalize = function() {
