@@ -1,4 +1,4 @@
-/*
+/* Names Craig Calvert and Brian Sheridan
  * An "object" representing a 3d vector to make operations simple and concise.
  *
  * Similar to how we work with plain numbers, we will work with vectors as
