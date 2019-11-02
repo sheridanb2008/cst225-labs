@@ -68,7 +68,7 @@ var eyeCoordinate = new Vector3(0, 0, eyeDistance); // all of your rays will use
 
 var sphere = new Sphere(new Vector3(0, 0, 0), 0.25); // todo = new Sphere(..., ...);
 var plane = new Plane(new Vector3(0, 1, 0), new Vector3(0, -0.25, 0)); // todo = new Plane(..., ...);
-
+var lightSource = new Vector3(1, 0, 0);
 // end of raytracer setup ******************************************************
 
 // -----------------------------------------------------------------------------
@@ -93,6 +93,11 @@ function setPixelColor(xPixelIndex, yPixelIndex, shadeOfGray /*[0,1]*/) {
 	imageData.data[index + 2] = shadeOfGray * 255; // blue channel
 	imageData.data[index + 3] = 255;
 }
+// -----------------------------------------------------------------------------
+function generateLightSource(intersectionPoint) {
+  
+    return intersectionPoint.dot(lightSource.normalize())
+}
 
 // -----------------------------------------------------------------------------
 function updateAndRender(timeElapsed) {
@@ -111,8 +116,11 @@ function updateAndRender(timeElapsed) {
             // Uncomment when your sphere or plane code is ready
             //console.log(pixelRay);
             var sphereResult = sphere.raycast(pixelRay);
-			var planeResult = plane.raycast(pixelRay);
-
+            var planeResult = plane.raycast(pixelRay);
+            var normalDotLight = generateLightSource(sphereResult.normal);
+            
+            //if (normalDotLight > 0.5) { console.log(normalDotLight) }
+            //console.log(normalDotLight)
             // determine which hit object is the closest (in case there is more than 1 hit)
             
 			// if (sphereResult.hit == true) {
@@ -131,21 +139,38 @@ function updateAndRender(timeElapsed) {
 			// 	setPixelColor(xPixelIndex, yPixelIndex, 0.1, 0.1, 0.1);
 			// }
 
-			// ************************************* TODO #7 ********************************//
+			//// ************************************* TODO #7 ********************************//
+			//if (sphereResult.hit == true && planeResult.hit == true) {
+			//	if (sphereResult.distance < planeResult.distance) {
+			//		setPixelColor(xPixelIndex, yPixelIndex, 0.8, 0.8, 0.8);
+			//	}
+			//	else {
+			//		setPixelColor(xPixelIndex, yPixelIndex, 0.5, 0.5, 0.5);
+			//	}
+			//} else if (sphereResult.hit == true && planeResult.hit == false) {
+			//	setPixelColor(xPixelIndex, yPixelIndex, 0.8, 0.8, 0.8);
+			//} else if (sphereResult.hit == false && planeResult.hit == true) {
+			//	setPixelColor(xPixelIndex, yPixelIndex, 0.5, 0.5, 0.5);
+			//}
+			//else {
+			//	setPixelColor(xPixelIndex, yPixelIndex, 0.1, 0.1, 0.1);
+			//}
+            // ************************************* TODO #8 ********************************//
 			if (sphereResult.hit == true && planeResult.hit == true) {
 				if (sphereResult.distance < planeResult.distance) {
-					setPixelColor(xPixelIndex, yPixelIndex, 0.8, 0.8, 0.8);
+					setPixelColor(xPixelIndex, yPixelIndex, normalDotLight, normalDotLight, normalDotLight);
 				}
 				else {
-					setPixelColor(xPixelIndex, yPixelIndex, 0.5, 0.5, 0.5);
+					setPixelColor(xPixelIndex, yPixelIndex, planeDotLight, planeDotLight, planeDotLight);
 				}
 			} else if (sphereResult.hit == true && planeResult.hit == false) {
-				setPixelColor(xPixelIndex, yPixelIndex, 0.8, 0.8, 0.8);
-			} else if (sphereResult.hit == false && planeResult.hit == true) {
-				setPixelColor(xPixelIndex, yPixelIndex, 0.5, 0.5, 0.5);
+				setPixelColor(xPixelIndex, yPixelIndex, normalDotLight, normalDotLight, normalDotLight);
+            } else if (sphereResult.hit == false && planeResult.hit == true) {
+                var planeDotLight = generateLightSource(planeResult.normal);
+				setPixelColor(xPixelIndex, yPixelIndex, planeDotLight, planeDotLight, planeDotLight);
 			}
 			else {
-				setPixelColor(xPixelIndex, yPixelIndex, 0.1, 0.1, 0.1);
+				setPixelColor(xPixelIndex, yPixelIndex, 0.6, 0.6, 0.1);
 			}
 		}
 	}
