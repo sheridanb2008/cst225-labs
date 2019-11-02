@@ -122,11 +122,29 @@ function updateAndRender(timeElapsed) {
 			// 	setPixelColor(xPixelIndex, yPixelIndex, 0.1); // dark gray
 			// }
 
-			if (sphereResult.hit == true) {
+			// ************************************* TODO #6 ********************************//
+			// if (sphereResult.hit == true) {
+			// 	setPixelColor(xPixelIndex, yPixelIndex, 0.8, 0.8, 0.8);
+			// } else if (planeResult.hit == true) {
+			// 	setPixelColor(xPixelIndex, yPixelIndex, 0.5, 0.5, 0.5);
+			// } else {
+			// 	setPixelColor(xPixelIndex, yPixelIndex, 0.1, 0.1, 0.1);
+			// }
+
+			// ************************************* TODO #7 ********************************//
+			if (sphereResult.hit == true && planeResult.hit == true) {
+				if (sphereResult.distance < planeResult.distance) {
+					setPixelColor(xPixelIndex, yPixelIndex, 0.8, 0.8, 0.8);
+				}
+				else {
+					setPixelColor(xPixelIndex, yPixelIndex, 0.5, 0.5, 0.5);
+				}
+			} else if (sphereResult.hit == true && planeResult.hit == false) {
 				setPixelColor(xPixelIndex, yPixelIndex, 0.8, 0.8, 0.8);
-			} else if (planeResult.hit == true) {
+			} else if (sphereResult.hit == false && planeResult.hit == true) {
 				setPixelColor(xPixelIndex, yPixelIndex, 0.5, 0.5, 0.5);
-			} else {
+			}
+			else {
 				setPixelColor(xPixelIndex, yPixelIndex, 0.1, 0.1, 0.1);
 			}
 		}
