@@ -77,11 +77,11 @@ function generateRayForPixel(xPixelIndex, yPixelIndex) {
 	var pixelX = -1 + pixelHalfWidth + pixelWidth * xPixelIndex;
 	var pixelY = 1 - pixelHalfWidth - pixelWidth * yPixelIndex;
 	var pixelCoordinate = new Vector3(pixelX, pixelY, 0);
-
-	var direction = new Vector3(pixelX, pixelY, eyeCoordinate.z); // = vector from the eye to the pixel
-
+    
+    var direction = pixelCoordinate.subtract(eyeCoordinate); // = vector from the eye to the pixel
+    
 	// Creates a ray from the eye toward the pixelCoordinate
-	var pixelRay = new Ray(pixelCoordinate,direction); // = new Ray(...);
+	var pixelRay = new Ray(eyeCoordinate,direction); // = new Ray(...);
 	return pixelRay;
 }
 
