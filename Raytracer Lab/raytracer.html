@@ -111,15 +111,23 @@ function updateAndRender(timeElapsed) {
             // Uncomment when your sphere or plane code is ready
             //console.log(pixelRay);
             var sphereResult = sphere.raycast(pixelRay);
-			//var planeResult = plane.raycast(pixelRay);
+			var planeResult = plane.raycast(pixelRay);
 
             // determine which hit object is the closest (in case there is more than 1 hit)
             
+			// if (sphereResult.hit == true) {
+			// 	setPixelColor(xPixelIndex, yPixelIndex, 0.8, 0.8, 0.8); // middle gray // <-- UNCOMMENT AFTER TEST
+			// } else {
+			// 	// we didn't hit anything, choose an appropriate backbround color
+			// 	setPixelColor(xPixelIndex, yPixelIndex, 0.1); // dark gray
+			// }
+
 			if (sphereResult.hit == true) {
-				setPixelColor(xPixelIndex, yPixelIndex, 0.5); // middle gray // <-- UNCOMMENT AFTER TEST
+				setPixelColor(xPixelIndex, yPixelIndex, 0.8, 0.8, 0.8);
+			} else if (planeResult.hit == true) {
+				setPixelColor(xPixelIndex, yPixelIndex, 0.5, 0.5, 0.5);
 			} else {
-				// we didn't hit anything, choose an appropriate backbround color
-				setPixelColor(xPixelIndex, yPixelIndex, 0.1); // dark gray
+				setPixelColor(xPixelIndex, yPixelIndex, 0.1, 0.1, 0.1);
 			}
 		}
 	}
