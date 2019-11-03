@@ -68,7 +68,9 @@ var eyeCoordinate = new Vector3(0, 0, eyeDistance); // all of your rays will use
 
 var sphere = new Sphere(new Vector3(0, 0, 0), 0.25); // todo = new Sphere(..., ...);
 var plane = new Plane(new Vector3(0, 1, 0), new Vector3(0, -0.25, 0)); // todo = new Plane(..., ...);
-var lightSource = new Vector3(1, 0, 0);
+var lightPos = new Vector3(1, 0, 0);
+
+
 // end of raytracer setup ******************************************************
 
 // -----------------------------------------------------------------------------
@@ -94,20 +96,27 @@ function setPixelColor(xPixelIndex, yPixelIndex, shadeOfGray /*[0,1]*/) {
 	imageData.data[index + 3] = 255;
 }
 // -----------------------------------------------------------------------------
-function generateLightSource(intersectionPoint) {
-  
-    return intersectionPoint.dot(lightSource.normalize())
+function generateLightSource(intersectionPoint,scalarPoint) {
+
+        var surfaceNormal = (intersectionPoint.clone().set(scalarPoint.x, scalarPoint.y, scalarPoint.z).subtract(intersectionPoint).normalize());
+        return surfaceNormal.dot(lightPos.clone().subtract(intersectionPoint).normalize())
+                
 }
+// -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
 function updateAndRender(timeElapsed) {
-	// Go through every pixel
+    var seconds = timeElapsed * 0.001; // convert milliseconds to seconds
+    lightPos.x = Math.cos(seconds) * 0.5; // radius of 0.5
+    lightPos.z = Math.sin(seconds) * 0.5; // radius of 0.5
+    
+    // Go through every pixel
 	for (var yPixelIndex = 0; yPixelIndex < pixelsDown; ++yPixelIndex) {
 		for (var xPixelIndex = 0; xPixelIndex < pixelsAcross; ++xPixelIndex) {
 
 			// Uncomment this once you've coded generateRayForPixel
 			var pixelRay = generateRayForPixel(xPixelIndex, yPixelIndex);
-
+            
 			 //The largest absolute value of the x component in our ray's direction // <-- REMOVE AFTER TEST
 			 //var maxValue = Math.sin(Math.sqrt(2) / 4); // < ---- REMOVE AFTER TEST
 			 //setPixelColor(xPixelIndex, yPixelIndex, Math.abs(pixelRay.direction.x) / maxValue); // <-- REMOVE AFTER TEST
@@ -117,7 +126,7 @@ function updateAndRender(timeElapsed) {
             //console.log(pixelRay);
             var sphereResult = sphere.raycast(pixelRay);
             var planeResult = plane.raycast(pixelRay);
-            var normalDotLight = generateLightSource(sphereResult.normal);
+
             
             //if (normalDotLight > 0.5) { console.log(normalDotLight) }
             //console.log(normalDotLight)
@@ -156,21 +165,42 @@ function updateAndRender(timeElapsed) {
 			//	setPixelColor(xPixelIndex, yPixelIndex, 0.1, 0.1, 0.1);
 			//}
             // ************************************* TODO #8 ********************************//
-			if (sphereResult.hit == true && planeResult.hit == true) {
-				if (sphereResult.distance < planeResult.distance) {
-					setPixelColor(xPixelIndex, yPixelIndex, normalDotLight, normalDotLight, normalDotLight);
+            var scalar = 7.5;
+           	if (sphereResult.hit == true && planeResult.hit == true) {
+               if (sphereResult.distance < planeResult.distance) {
+                       var normalDotLight = generateLightSource(sphereResult.point, sphereResult.point.clone().multiplyScalar(scalar));
+                       setPixelColor(xPixelIndex, yPixelIndex, (normalDotLight));
+                   
 				}
-				else {
-					setPixelColor(xPixelIndex, yPixelIndex, planeDotLight, planeDotLight, planeDotLight);
+               else {
+                   var pixelToLightRay = new Ray(planeResult.point, (lightPos.clone()).subtract(planeResult.point));
+                   var inShadow = sphere.raycast(pixelToLightRay);
+                   if (inShadow.hit == false) {
+                       var normalDotLight = generateLightSource(planeResult.point, (planeResult.point.clone()).set(planeResult.point.x, 1, planeResult.point.z));
+                       setPixelColor(xPixelIndex, yPixelIndex, normalDotLight);
+                   } else {
+                       var normalDotLight = generateLightSource(planeResult.point, (planeResult.point.clone()).set(planeResult.point.x, 1, planeResult.point.z));
+                       setPixelColor(xPixelIndex, yPixelIndex, 0,0,0);
+                   }
 				}
 			} else if (sphereResult.hit == true && planeResult.hit == false) {
-				setPixelColor(xPixelIndex, yPixelIndex, normalDotLight, normalDotLight, normalDotLight);
+                      var normalDotLight = generateLightSource(sphereResult.point, sphereResult.point.clone().multiplyScalar(scalar));
+                       setPixelColor(xPixelIndex, yPixelIndex, (normalDotLight));
+                   
             } else if (sphereResult.hit == false && planeResult.hit == true) {
-                var planeDotLight = generateLightSource(planeResult.normal);
-				setPixelColor(xPixelIndex, yPixelIndex, planeDotLight, planeDotLight, planeDotLight);
+                      var pixelToLightRay = new Ray(planeResult.point, (lightPos.clone()).subtract(planeResult.point));
+                      var inShadow = sphere.raycast(pixelToLightRay);
+                      if (inShadow.hit == false) {
+                       var normalDotLight = generateLightSource(planeResult.point, (planeResult.point.clone()).set(planeResult.point.x, 1, planeResult.point.z));
+                       setPixelColor(xPixelIndex, yPixelIndex, normalDotLight);
+                   } else {
+                       
+                       var normalDotLight = generateLightSource(planeResult.point, (planeResult.point.clone()).set(planeResult.point.x, 1, planeResult.point.z));
+                       setPixelColor(xPixelIndex, yPixelIndex, 0,0,0);
+                   }
 			}
 			else {
-				setPixelColor(xPixelIndex, yPixelIndex, 0.6, 0.6, 0.1);
+				setPixelColor(xPixelIndex, yPixelIndex, 0.1, 0.1, 0.1);
 			}
 		}
 	}
