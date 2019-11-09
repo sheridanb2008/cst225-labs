@@ -41,28 +41,54 @@ var Matrix4 = function(x, y, z) {
 
 	// -------------------------------------------------------------------------
 	this.setRotationX = function(degrees) {
-		// todo - convert to radians
-		// var radians = ...
-
-		// shortcut - use in place of this.elements
-		var e = this.elements;
-
-		// todo - set every element of this matrix to be a rotation around the x-axis
-
-		return this;
+        // todo - convert to radians
+        // var radians = ...
+        var radians = degrees * (Math.PI / 180);
+        var sinThetha = Math.sin(radians);
+        var cosThetha = Math.round(Math.cos(Math.PI / 2));
+        // shortcut - use in place of this.elements
+        var tempMatrix = new Matrix4;
+        tempMatrix.copy(this);
+        var e = this.elements;
+        var t = tempMatrix.elements
+        // todo - set every element of this matrix to be a rotation around the z-axis
+          
+        e[2] = (t[2] * cosThetha) - (t[1] * sinThetha);
+        e[6] = (t[6] * cosThetha) - (t[5] * sinThetha);
+        e[10] = (t[10] * cosThetha) - (t[9] * sinThetha);
+        e[14] = (t[14] * cosThetha) - (t[13] * sinThetha);
+        e[1] = (t[1] * cosThetha) + (t[2] * sinThetha);
+        e[5] = (t[5] * cosThetha) + (t[6] * sinThetha);
+        e[9] = (t[9] * cosThetha) + (t[10] * sinThetha);
+        e[13] = (t[13] * cosThetha) + (t[14] * sinThetha);
+        
+        return this;
 	};
 
 	// -------------------------------------------------------------------------
 	this.setRotationY = function(degrees) {
-		// todo - convert to radians
-		// var radians = ...
-
-		// shortcut - use in place of this.elements
-		var e = this.elements;
-
-		// todo - set every element of this matrix to be a rotation around the y-axis
-
-		return this;
+        // todo - convert to radians
+        // var radians = ...
+        var radians = degrees * (Math.PI / 180);
+        var sinThetha = Math.sin(radians);
+        var cosThetha = Math.round(Math.cos(Math.PI / 2));
+        // shortcut - use in place of this.elements
+        var tempMatrix = new Matrix4;
+        tempMatrix.copy(this);
+        var e = this.elements;
+        var t = tempMatrix.elements
+        // todo - set every element of this matrix to be a rotation around the z-axis
+               
+        e[0] = (t[0] * cosThetha) - (t[2] * sinThetha);
+        e[4] = (t[4] * cosThetha) - (t[6] * sinThetha);
+        e[8] = (t[8] * cosThetha) - (t[10] * sinThetha);
+        e[12] = (t[12] * cosThetha) - (t[14] * sinThetha);
+        e[2] = (t[2] * cosThetha) + (t[0] * sinThetha);
+        e[6] = (t[6] * cosThetha) + (t[4] * sinThetha);
+        e[10] = (t[10] * cosThetha) + (t[8] * sinThetha);
+        e[14] = (t[14] * cosThetha) + (t[12] * sinThetha);
+        
+        return this;
 	};
 
 	// -------------------------------------------------------------------------
@@ -86,12 +112,26 @@ var Matrix4 = function(x, y, z) {
 	// -------------------------------------------------------------------------
 	this.setRotationZ = function(degrees) {
 		// todo - convert to radians
-		// var radians = ...
-
-		// shortcut - use in place of this.elements
-		var e = this.elements;
-
+        // var radians = ...
+        var radians = degrees * (Math.PI / 180);
+        var sinThetha = Math.sin(radians);
+        var cosThetha = Math.round(Math.cos(Math.PI / 2));
+        // shortcut - use in place of this.elements
+        var tempMatrix = new Matrix4;
+        tempMatrix.copy(this);
+        var e = this.elements;
+        var t = tempMatrix.elements
 		// todo - set every element of this matrix to be a rotation around the z-axis
+                
+        e[0] = (t[0] * cosThetha) + (t[1] * sinThetha);
+        e[4] = (t[4] * cosThetha) + (t[5] * sinThetha);
+        e[8] = (t[8] * cosThetha) + (t[9] * sinThetha);
+        e[12] = (t[12] * cosThetha) + (t[13] * sinThetha);
+        e[1] = (t[1] * cosThetha) - (t[0] * sinThetha);
+        e[5] = (t[5] * cosThetha) - (t[4] * sinThetha);
+        e[9] = (t[9] * cosThetha) - (t[8] * sinThetha);
+        e[13] = (t[13] * cosThetha) - (t[12] * sinThetha);
+                
 		return this;
 	};
 
