@@ -70,11 +70,16 @@ var Matrix4 = function(x, y, z) {
 		// todo - wipe out the existing matrix and make it a pure translation
 		//      - If arg1 is a Vector3, use its components and ignore arg2 and arg3
 		//      - O.W., treat arg1 as x, arg2 as y, and arg3 as z
-		if (arg1 instanceof Vector3) {
-			//...
+        if (arg1 instanceof Vector3) {
+            this.elements[3] = arg1.x;
+            this.elements[7] = arg1.y;
+            this.elements[11] = arg1.z;
 		} else {
-			//...
-		}
+            this.elements[3] = arg1;
+            this.elements[7] = arg2;
+            this.elements[11] = arg3;
+        }
+        
 		return this;
 	}
 
@@ -111,9 +116,13 @@ var Matrix4 = function(x, y, z) {
 		//      - If arg1 is a Vector3, add its components and ignore arg2 and arg3
 		//      - O.W., treat arg1 as x, arg2 as y, and arg3 as z
 		if (arg1 instanceof Vector3) {
-			//...
+            this.elements[3] += arg1.x;
+            this.elements[7] += arg1.y;
+            this.elements[11] += arg1.z;
 		} else {
-			//...
+            this.elements[3] += arg1;
+            this.elements[7] += arg2;
+            this.elements[11] += arg3;
 		}
 		return this;
 	}

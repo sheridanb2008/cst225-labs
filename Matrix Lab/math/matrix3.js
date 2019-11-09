@@ -22,9 +22,8 @@ var Matrix3 = function() {
 	this.clone = function() {
 		// todo
 		// create a new Matrix3 instance that is an exact copy of 'this' one and return it
-		// cloneMatrix.set(this.elements[0], this.elements[1], this.elements[2], this.elements[3], this.elements[4], this.elements[5], this.elements[6], this.elements[7], this.elements[8]);
-		
-		return this.matrixClone; /* should be a new Matrix instance*/;
+        var clone = new Matrix3; /* should be a new Matrix instance*/;
+        return clone.copy(this); /* should be a new Matrix instance*/;
 	};
 
 	// -------------------------------------------------------------------------
@@ -103,22 +102,58 @@ var Matrix3 = function() {
 	this.multiplyRightSide = function(otherMatrixOnRight) {
 		// todo
 		// multiply 'this' matrix (on the left) by otherMatrixOnRight (on the right)
-		// the results should be applied to the elements on 'this' matrix
+        // the results should be applied to the elements on 'this' matrix
+        var tempMatrix = new Matrix3;
 
-		return this;
-	};
+        tempMatrix.elements[0] = this.multiplyRecurrsion((this.clone()).elements, 0, 0, 2, otherMatrixOnRight.elements);
+        tempMatrix.elements[1] = this.multiplyRecurrsion((this.clone()).elements, 0, 1, 2, otherMatrixOnRight.elements);
+        tempMatrix.elements[2] = this.multiplyRecurrsion((this.clone()).elements, 0, 2, 2, otherMatrixOnRight.elements);
+
+        tempMatrix.elements[3] = this.multiplyRecurrsion((this.clone()).elements, 3, 0, 5, otherMatrixOnRight.elements);
+        tempMatrix.elements[4] = this.multiplyRecurrsion((this.clone()).elements, 3, 1, 5, otherMatrixOnRight.elements);
+        tempMatrix.elements[5] = this.multiplyRecurrsion((this.clone()).elements, 3, 2, 5, otherMatrixOnRight.elements);
+
+        tempMatrix.elements[6] = this.multiplyRecurrsion((this.clone()).elements, 6, 0, 8, otherMatrixOnRight.elements);
+        tempMatrix.elements[7] = this.multiplyRecurrsion((this.clone()).elements, 6, 1, 8, otherMatrixOnRight.elements);
+        tempMatrix.elements[8] = this.multiplyRecurrsion((this.clone()).elements, 6, 2, 8, otherMatrixOnRight.elements);
+        
+        this.copy(tempMatrix)
+        
+        return this;
+    };
+    
+    this.multiplyRecurrsion = function(matrix, matrixIndex, otherIndex, breakPoint, otherMatrixOnRight) {
+        
+        if (matrixIndex < breakPoint) {
+            return this.multiplyRecurrsion(matrix, matrixIndex + 1, otherIndex + 3, breakPoint, otherMatrixOnRight) + (matrix[matrixIndex] * otherMatrixOnRight[otherIndex]);
+        }
+        else {
+            return matrix[matrixIndex] * otherMatrixOnRight[otherIndex];
+        }  
+    }
 
 	// -------------------------------------------------------------------------
 	this.determinant = function() {
 		// todo
-		// compute and return the determinant for 'this' matrix
-		return Math.Infinity; // should be the determinant
+        // compute and return the determinant for 'this' matrix
+        var a = this.elements[0] * this.elements[4] * this.elements[8];
+        var b = this.elements[3] * this.elements[7] * this.elements[2];
+        var c = this.elements[6] * this.elements[1] * this.elements[5];
+        var d = this.elements[2] * this.elements[4] * this.elements[6];
+        var e = this.elements[5] * this.elements[7] * this.elements[0];
+        var f = this.elements[8] * this.elements[1] * this.elements[3];
+
+        var determinant = (a + b + c) - (d + e + f);
+        return determinant; // should be the determinant
 	};
 
 	// -------------------------------------------------------------------------
 	this.transpose = function() {
 		// todo
-		// modify 'this' matrix so that it becomes its transpose
+        // modify 'this' matrix so that it becomes its transpose
+        var tempMatrix = new Matrix3;
+        tempMatrix.set(this.elements[0], this.elements[3], this.elements[6], this.elements[1], this.elements[4], this.elements[7], this.elements[2], this.elements[5], this.elements[8]);
+        this.copy(tempMatrix);
 		return this;
 	};
 
@@ -126,8 +161,27 @@ var Matrix3 = function() {
 	this.inverse = function() {
 		// todo
 		// modify 'this' matrix so that it becomes its inverse
-		return this;
-	};
+        var tempMatrix = new Matrix3;
+        var determinant = this.determinant();
+
+        var a = (this.inverseCalulation(this.elements[4], this.elements[8], this.elements[5], this.elements[7], 1)) / determinant;
+        var b = (this.inverseCalulation(this.elements[3], this.elements[8], this.elements[5], this.elements[6],-1)) / determinant;
+        var c = (this.inverseCalulation(this.elements[3], this.elements[7], this.elements[4], this.elements[6], 1)) / determinant;
+        var d = (this.inverseCalulation(this.elements[1], this.elements[8], this.elements[2], this.elements[7],-1)) / determinant;
+        var e = (this.inverseCalulation(this.elements[0], this.elements[8], this.elements[2], this.elements[6], 1)) / determinant;
+        var f = (this.inverseCalulation(this.elements[0], this.elements[7], this.elements[1], this.elements[6],-1)) / determinant;
+        var g = (this.inverseCalulation(this.elements[1], this.elements[5], this.elements[2], this.elements[4], 1)) / determinant;
+        var h = (this.inverseCalulation(this.elements[0], this.elements[5], this.elements[2], this.elements[3],-1)) / determinant;
+        var i = (this.inverseCalulation(this.elements[0], this.elements[4], this.elements[1], this.elements[3], 1)) / determinant;
+
+        tempMatrix.set(a, d, g, b, e, h, c, f, i)
+        this.copy(tempMatrix);
+        return this.elements;
+    };
+
+    this.inverseCalulation = function(a, b, c, d, multiplier) {
+        return ((a * b) - (c * d)) * multiplier;
+    }
 
 	// -------------------------------------------------------------------------
 	this.log = function() {
