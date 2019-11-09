@@ -1,4 +1,5 @@
-/*
+/* Names Craig Calvert and Brian Sheridan
+ *
  * An object representing a 3x3 matrix
  */
 

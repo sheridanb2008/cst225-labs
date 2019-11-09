@@ -1,4 +1,5 @@
-/*
+/* Names Craig Calvert and Brian Sheridan
+ *
  * An object representing a 4x4 matrix
  */
 
@@ -138,14 +139,32 @@ var Matrix4 = function(x, y, z) {
 	// -------------------------------------------------------------------------
 	this.setPerspective = function(fovy, aspect, near, far) {
 		// todo - convert fovy to radians
-		// var fovyRads = ...
+		var fovyRads = fovy * (Math.PI / 180);
 
 		// todo -compute t (top) and r (right)
+		var top = near * Math.tan(fovyRads/2);
+		var right = top * aspect;
 
 		// shortcut - use in place of this.elements
 		var e = this.elements;
 
 		// todo - set every element to the appropriate value
+		e[0] = near / right; // <- n/r
+		e[1] = 0;
+		e[2] = 0;
+		e[3] = 0;
+		e[4] = 0;
+		e[5] = near / top; // <- n/t
+		e[6] = 0;
+		e[7] = 0;
+		e[8] = 0;
+		e[9] = 0;
+		e[10] = -((far + near) / (far - near)); // <- -(f + n / f - n)
+		e[11] = -((2 * (near * far)) / (far - near)); // <- -(2nf / f - n)
+		e[12] = 0;
+		e[13] = 0;
+		e[14] = -1
+		e[15] = 0;
 
 		return this;
 	};
