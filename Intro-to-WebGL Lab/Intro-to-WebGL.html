@@ -219,8 +219,12 @@
 
         // todo #7
         // - update the triangle geometry world matrix here (used to place the triangle into world space)
+        triangleGeometry.worldMatrix.setIdentity();
+        triangleGeometry.worldMatrix.setTranslation(0, 0, -7);
         // - set view matrix to identity
+        viewMatrix.setIdentity();
         // - set the projection matrix using values from online guide
+        projectionMatrix.setPerspective(45, 1.5, 0.1, 1000);
         
         // calculate the number of degrees we should have rotated given how much time has elapsed
         // 60 degrees per second
