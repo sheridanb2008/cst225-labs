@@ -109,23 +109,23 @@
         var vertexShaderText = document.getElementById("shader-vs").textContent;
 
         // todo #4 - uncomment when directed
-        // var vertexShader = createCompiledShader(gl, vertexShaderText, gl.VERTEX_SHADER);
+        var vertexShader = createCompiledShader(gl, vertexShaderText, gl.VERTEX_SHADER);
 
         var fragmentShaderText = document.getElementById("shader-fs").textContent;
 
         // todo #4 - uncomment when directed
-        // var fragmentShader = createCompiledShader(gl, fragmentShaderText, gl.FRAGMENT_SHADER);
+        var fragmentShader = createCompiledShader(gl, fragmentShaderText, gl.FRAGMENT_SHADER);
 
         // todo #5 - delete the "return" line below when instructed by the guide
-        return;
+        // return;
 
         // Create an empty gl "program" which will be composed of compiled shaders
         shaderProgram = gl.createProgram();
-        gl.attachShader(shaderProgram, /* todo - arg2*/);
-        gl.attachShader(shaderProgram, /* todo - arg2*/);
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
 
         // Tell gl it's ready to go, link it
-        gl.linkProgram(/* todo - arg1*/);
+        gl.linkProgram(shaderProgram);
         if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
             alert("Could not initialise shaders");
         }
@@ -152,8 +152,8 @@
         var shader = gl.createShader(shaderType);
 
         // todo #4 - uncomment this when ready to implement
-        // gl.shaderSource(/* todo argument 1*/, /* todo argument 2*/);
-        // gl.compileShader(/* todo argument 1*/);
+        gl.shaderSource(shader, shaderText);
+        gl.compileShader(shader);
 
         if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
             alert(gl.getShaderInfoLog(shader));
