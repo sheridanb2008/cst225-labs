@@ -9,6 +9,7 @@
 <!-- vertex shader - Our part in the geometry processing part of the pipeline happens here -->
 <script id="shader-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
+    attribute vec3 aVertexColor;
 
     uniform mat4 uWorldMatrix;
     uniform mat4 uViewMatrix;
@@ -23,7 +24,7 @@
             uWorldMatrix *
             vec4(aVertexPosition, 1.0); // treat the vertex as a point, multiply right to left
 
-        vColor = vec3(0.0, 0.0, 0.0);
+        vColor = aVertexColor;
     }
 </script>
 
@@ -141,6 +142,8 @@
 
         // todo
         // Get a reference to the color attribute variable in the vertex shader and enable it
+        shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
+        gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
 
         shaderProgram.worldMatrixUniform = gl.getUniformLocation(shaderProgram, "uWorldMatrix");
         shaderProgram.viewMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
@@ -189,11 +192,19 @@
 
         // todo
         // 1. create color buffer
+        var colorBuffer = gl.createBuffer();
         // 2. bind color buffer
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         // 3. create color array
+        var colors = [
+            1.0, 0.0, 0.0, 1.0,    // color red
+            0.0, 1.0, 0.0, 1.0,    // color green
+            0.0, 0.0, 1.0, 1.0     // color blue
+        ];
         // 4. "buffer" color data
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
         // 5. store a reference to the color buffer on the triangleGeometry object
-        //    triangleGeometry.colorBuffer = ??;
+        triangleGeometry.colorBuffer = colorBuffer;
     }
 
 
@@ -244,6 +255,15 @@
         );
 
         // todo #10 - map the color buffer similar to the position buffer above
+        gl.bindBuffer(gl.ARRAY_BUFFER, triangleGeometry.colorBuffer);
+        gl.vertexAttribPointer(
+            triangleGeometry.shaderProgram.vertexColorAttribute,
+            4,
+            gl.FLOAT,
+            gl.FALSE,
+            0,
+            0
+        );
 
         // Send our matrices to the shader
         gl.uniformMatrix4fv(shaderProgram.worldMatrixUniform, false, triangleGeometry.worldMatrix.clone().transpose().elements);
