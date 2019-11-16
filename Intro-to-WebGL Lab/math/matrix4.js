@@ -1,5 +1,4 @@
-/* Names Craig Calvert and Brian Sheridan
- *
+/*
  * An object representing a 4x4 matrix
  */
 
@@ -42,146 +41,97 @@ var Matrix4 = function(x, y, z) {
 
 	// -------------------------------------------------------------------------
 	this.setRotationX = function(degrees) {
-        // todo - convert to radians
-        // var radians = ...
-        var radians = degrees * (Math.PI / 180);
-        var sinThetha = Math.sin(radians);
-        var cosThetha = Math.round(Math.cos(Math.PI / 2));
-        // shortcut - use in place of this.elements
-        var tempMatrix = new Matrix4;
-        tempMatrix.copy(this);
-        var e = this.elements;
-        var t = tempMatrix.elements
-        // todo - set every element of this matrix to be a rotation around the z-axis
-          
-        e[2] = (t[2] * cosThetha) - (t[1] * sinThetha);
-        e[6] = (t[6] * cosThetha) - (t[5] * sinThetha);
-        e[10] = (t[10] * cosThetha) - (t[9] * sinThetha);
-        e[14] = (t[14] * cosThetha) - (t[13] * sinThetha);
-        e[1] = (t[1] * cosThetha) + (t[2] * sinThetha);
-        e[5] = (t[5] * cosThetha) + (t[6] * sinThetha);
-        e[9] = (t[9] * cosThetha) + (t[10] * sinThetha);
-        e[13] = (t[13] * cosThetha) + (t[14] * sinThetha);
-        
-        return this;
+		var radians = degrees * Math.PI / 180;
+
+		var e = this.elements;
+		var c = Math.cos(radians);
+		var s = Math.sin(radians);
+
+		e[0] = 1;   e[1] = 0;   e[2] = 0;   e[3] = 0;
+		e[4] = 0;   e[5] = c;   e[6] = -s;  e[7] = 0;
+		e[8] = 0;   e[9] = s;   e[10] = c;  e[11] = 0;
+		e[12] = 0;  e[13] = 0;  e[14] = 0;  e[15] = 1;
+
+		return this;
 	};
 
 	// -------------------------------------------------------------------------
 	this.setRotationY = function(degrees) {
-        // todo - convert to radians
-        // var radians = ...
-        var radians = degrees * (Math.PI / 180);
-        var sinThetha = Math.sin(radians);
-        var cosThetha = Math.round(Math.cos(Math.PI / 2));
-        // shortcut - use in place of this.elements
-        var tempMatrix = new Matrix4;
-        tempMatrix.copy(this);
-        var e = this.elements;
-        var t = tempMatrix.elements
-        // todo - set every element of this matrix to be a rotation around the z-axis
-               
-        e[0] = (t[0] * cosThetha) - (t[2] * sinThetha);
-        e[4] = (t[4] * cosThetha) - (t[6] * sinThetha);
-        e[8] = (t[8] * cosThetha) - (t[10] * sinThetha);
-        e[12] = (t[12] * cosThetha) - (t[14] * sinThetha);
-        e[2] = (t[2] * cosThetha) + (t[0] * sinThetha);
-        e[6] = (t[6] * cosThetha) + (t[4] * sinThetha);
-        e[10] = (t[10] * cosThetha) + (t[8] * sinThetha);
-        e[14] = (t[14] * cosThetha) + (t[12] * sinThetha);
-        
-        return this;
+		var radians = degrees * Math.PI / 180;
+
+		var e = this.elements;
+		var c = Math.cos(radians);
+		var s = Math.sin(radians);
+
+		e[0] = c;   e[1] = 0;   e[2] = s;   e[3] = 0;
+		e[4] = 0;   e[5] = 1;   e[6] = 0;   e[7] = 0;
+		e[8] = -s;  e[9] = 0;   e[10] = c;  e[11] = 0;
+		e[12] = 0;  e[13] = 0;  e[14] = 0;  e[15] = 1;
+
+		return this;
 	};
 
-	// -------------------------------------------------------------------------
-	this.setTranslation = function(arg1, arg2, arg3) {
-		// todo - wipe out the existing matrix and make it a pure translation
-		//      - If arg1 is a Vector3, use its components and ignore arg2 and arg3
-		//      - O.W., treat arg1 as x, arg2 as y, and arg3 as z
-        if (arg1 instanceof Vector3) {
-            this.elements[3] = arg1.x;
-            this.elements[7] = arg1.y;
-            this.elements[11] = arg1.z;
-		} else {
-            this.elements[3] = arg1;
-            this.elements[7] = arg2;
-            this.elements[11] = arg3;
-        }
-        
-		return this;
-	}
 
 	// -------------------------------------------------------------------------
 	this.setRotationZ = function(degrees) {
-		// todo - convert to radians
-        // var radians = ...
-        var radians = degrees * (Math.PI / 180);
-        var sinThetha = Math.sin(radians);
-        var cosThetha = Math.round(Math.cos(Math.PI / 2));
-        // shortcut - use in place of this.elements
-        var tempMatrix = new Matrix4;
-        tempMatrix.copy(this);
-        var e = this.elements;
-        var t = tempMatrix.elements
-		// todo - set every element of this matrix to be a rotation around the z-axis
-                
-        e[0] = (t[0] * cosThetha) + (t[1] * sinThetha);
-        e[4] = (t[4] * cosThetha) + (t[5] * sinThetha);
-        e[8] = (t[8] * cosThetha) + (t[9] * sinThetha);
-        e[12] = (t[12] * cosThetha) + (t[13] * sinThetha);
-        e[1] = (t[1] * cosThetha) - (t[0] * sinThetha);
-        e[5] = (t[5] * cosThetha) - (t[4] * sinThetha);
-        e[9] = (t[9] * cosThetha) - (t[8] * sinThetha);
-        e[13] = (t[13] * cosThetha) - (t[12] * sinThetha);
-                
+		var radians = degrees * Math.PI / 180;
+
+		var e = this.elements;
+		var c = Math.cos(radians);
+		var s = Math.sin(radians);
+
+		e[0] = c;   e[1] = -s;  e[2] = 0;   e[3] = 0;
+		e[4] = s;   e[5] = c;   e[6] = 0;   e[7] = 0;
+		e[8] = 0;   e[9] = 0;   e[10] = 1;  e[11] = 0;
+		e[12] = 0;  e[13] = 0;  e[14] = 0;  e[15] = 1;
+
 		return this;
 	};
 
 	// -------------------------------------------------------------------------
 	this.setPerspective = function(fovy, aspect, near, far) {
-		// todo - convert fovy to radians
-		var fovyRads = fovy * (Math.PI / 180);
+		var fovyRads = (Math.PI / 180) * fovy;
+		var t = near * Math.tan(fovyRads / 2);
+		var r = t * aspect;
 
-		// todo -compute t (top) and r (right)
-		var top = near * Math.tan(fovyRads/2);
-		var right = top * aspect;
+		// lazy
+		this.setIdentity();
 
-		// shortcut - use in place of this.elements
 		var e = this.elements;
-
-		// todo - set every element to the appropriate value
-		e[0] = near / right; // <- n/r
-		e[1] = 0;
-		e[2] = 0;
-		e[3] = 0;
-		e[4] = 0;
-		e[5] = near / top; // <- n/t
-		e[6] = 0;
-		e[7] = 0;
-		e[8] = 0;
-		e[9] = 0;
-		e[10] = -((far + near) / (far - near)); // <- -(f + n / f - n)
-		e[11] = -((2 * (near * far)) / (far - near)); // <- -(2nf / f - n)
-		e[12] = 0;
-		e[13] = 0;
-		e[14] = -1
-		e[15] = 0;
+		e[0] = near / r;
+		e[5] = near / t;
+		e[10] = -(far + near) / (far - near);
+		e[11] = (-2 * near * far) / (far - near);
+		e[14] = -1;
+		e[15] = 0; // easy to forget this one (that lazy identity call...)
 
 		return this;
 	};
 
 	// -------------------------------------------------------------------------
-	this.translate = function(arg1, arg2, arg3) {
-		// todo - add a translation to the existing matrix
-		//      - If arg1 is a Vector3, add its components and ignore arg2 and arg3
-		//      - O.W., treat arg1 as x, arg2 as y, and arg3 as z
+	this.setTranslation = function(arg1, arg2, arg3) {
 		if (arg1 instanceof Vector3) {
-            this.elements[3] += arg1.x;
-            this.elements[7] += arg1.y;
-            this.elements[11] += arg1.z;
+			this.elements[3] = arg1.x;
+			this.elements[7] = arg1.y;
+			this.elements[11] = arg1.z;
 		} else {
-            this.elements[3] += arg1;
-            this.elements[7] += arg2;
-            this.elements[11] += arg3;
+			this.elements[3] = arg1;
+			this.elements[7] = arg2;
+			this.elements[11] = arg3;
+		}
+		return this;
+    }
+
+	// -------------------------------------------------------------------------
+	this.translate = function(arg1, arg2, arg3) {
+		if (arg1 instanceof Vector3) {
+			this.elements[3] += arg1.x;
+			this.elements[7] += arg1.y;
+			this.elements[11] += arg1.z;
+		} else {
+			this.elements[3] += arg1;
+			this.elements[7] += arg2;
+			this.elements[11] += arg3;
 		}
 		return this;
 	}
@@ -317,7 +267,7 @@ var Matrix4 = function(x, y, z) {
 		if ( det === 0 ) {
 			var msg = "can't invert matrix, determinant is 0";
 			console.warn(msg);
-			return this.setIdentity();
+			return this.identity();
 		}
 
 		var detInv = 1 / det;
@@ -349,11 +299,11 @@ var Matrix4 = function(x, y, z) {
 	this.log = function() {
 		var te = this.elements;
 		console.log('[ '+
-      '\n ' + te[0] + ', ' +  te[1] + ', ' +  te[2] + ', ' +  te[3] +
-      '\n ' + te[4] + ', ' +  te[5] + ', ' +  te[6] + ', ' +  te[7] +
-      '\n ' + te[8] + ', ' +  te[9] + ', ' +  te[10] + ', ' + te[11] +
-      '\n ' + te[12] + ', ' + te[13] + ', ' + te[14] + ', ' + te[15] +
-      '\n]'
+					'\n ' +te[0] + ', ' + te[1] + ', ' + te[2] + ', ' + te[3] +
+			        '\n ' + te[4] + ', ' + te[5] + ', ' + te[6] + ', ' + te[7] +
+			        '\n ' + te[8] + ', ' + te[9] + ', ' + te[10] + ', ' + te[11] +
+			        '\n ' + te[12] + ', ' + te[13] + ', ' + te[14] + ', ' + te[15] +
+			        '\n]'
 		);
 
 		return this;
