@@ -207,8 +207,9 @@
         triangleGeometry.colorBuffer = colorBuffer;
     }
 
-
     // -------------------------------------------------------------------------
+    var lastCall = Date.now(); // Last time this function was called
+
     function updateAndRender() {
         requestAnimationFrame(updateAndRender);
 
@@ -221,7 +222,10 @@
         gl.clearColor(0.707, 0.707, 1, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        renderTriangle(0 /* todo #11 - set the number of seconds elapsed */);
+        var now = Date.now();
+        var elapsed = now - lastCall;
+
+        renderTriangle(elapsed / 1000.0 /* todo #11 - set the number of seconds elapsed */);
         // renderLines();
     }
 
