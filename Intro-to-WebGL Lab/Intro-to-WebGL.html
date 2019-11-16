@@ -223,9 +223,8 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         var now = Date.now();
-        var elapsed = now - lastCall;
-
-        renderTriangle(elapsed / 1000.0 /* todo #11 - set the number of seconds elapsed */);
+        var elapsed = (now - lastCall) / 1000; // elapsed time in seconds
+        renderTriangle(elapsed /* todo #11 - set the number of seconds elapsed */);
         // renderLines();
     }
 
