@@ -328,12 +328,8 @@
         // todo update the triangle geometry world matrix here (used to place the triangle into world space)
         
         lineGridGeometry.worldMatrix.setIdentity();
-        // todo set view matrix to identity
-        viewMatrix.setIdentity();
-        // todo set the projection matrix using values from online guide
-        projectionMatrix.setPerspective(45, 1.5, 0.1, 1000);
+        
         // todo bind and map(gl.vertexAttribPointer) the buffers
-        lineGridGeometry.worldMatrix.setTranslation(0,0,-7);
         gl.bindBuffer(gl.ARRAY_BUFFER, lineGridGeometry.positionBuffer);
         gl.vertexAttribPointer(
             lineGridGeometry.shaderProgram.vertexPositionAttribute,
