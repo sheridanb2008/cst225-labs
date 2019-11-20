@@ -16,15 +16,16 @@
     uniform mat4 uProjectionMatrix;
 
     varying vec3 vColor;
+    
 
     void main(void) {
-        gl_Position =
-            uProjectionMatrix *
-            uViewMatrix *
-            uWorldMatrix *
-            vec4(aVertexPosition, 1.0); // treat the vertex as a point, multiply right to left
+    gl_Position =
+    uProjectionMatrix *
+    uViewMatrix *
+    uWorldMatrix *
+    vec4(aVertexPosition, 1.0); // treat the vertex as a point, multiply right to left
 
-        vColor = aVertexColor;
+    vColor = aVertexColor;
     }
 </script>
 
@@ -71,14 +72,14 @@
     // -------------------------------------------------------------------------
     function initializeAndStartRendering() {
         initGL();
-
+        gl.enable(gl.DEPTH_TEST);
         // uncomment when directed by the guide - todo #3
         createShaders();
 
         createTriangleGeometry();
 
         // bonus todo
-        // createLineGridGeometry();
+        createLineGridGeometry();
 
         if (gl) {
             updateAndRender();
@@ -225,7 +226,7 @@
         var now = Date.now();
         var elapsed = (now - lastCall) / 1000; // elapsed time in seconds
         renderTriangle(elapsed /* todo #11 - set the number of seconds elapsed */);
-        // renderLines();
+        renderLines();
     }
 
     // -------------------------------------------------------------------------
@@ -280,26 +281,27 @@
     // -------------------------------------------------------------------------
     function createLineGridGeometry() {
         // allocate a matrix that we will reuse for this object (situate it in the world)
+        
         lineGridGeometry.worldMatrix = new Matrix4();
 
         // specify the shader which carries the instructions for "how" to render
-        triangleGeometry.shaderProgram = shaderProgram;
+        lineGridGeometry.shaderProgram = shaderProgram;
 
         var positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-        var linePositions = [];
-
+        var linePositions = []
+        
         // specify the horizontal lines
         for (var i = -10; i <= 10; ++i) {
-            // add position for line start point (x value should be i)
-            // add position for line end point (x value should be i)
+            linePositions.push(i, -1.0,-10) // (vertex 1: x, y, z) add position for line start point (x value should be i)
+            linePositions.push(i, -1.0, 10)  // (vertex 2: x, y, z) add position for line end point (x value should be i)
         }
 
         // specify the lateral lines
         for (var i = -10; i <= 10; ++i) {
-            // add position for line start point (z value should be i)
-            // add position for line end point (z value should be i)
+            linePositions.push(-10,-1, i)// add position for line start point (z value should be i)
+            linePositions.push( 10,-1, i)// add position for line end point (z value should be i)
         }
 
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(linePositions), gl.STATIC_DRAW);
@@ -308,6 +310,7 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
         var lineColors = [];
+
         for (var i = 0; i < linePositions.length / 3; ++i) {
             lineColors.push.apply(lineColors, [0, 0, 0]);
         }
@@ -317,23 +320,48 @@
         lineGridGeometry.positionBuffer = positionBuffer;
         lineGridGeometry.colorBuffer = colorBuffer;
         lineGridGeometry.bufferItemCount = 2 * 21 * 2;
+        
     }
 
     // -------------------------------------------------------------------------
     function renderLines() {
         // todo update the triangle geometry world matrix here (used to place the triangle into world space)
+        
+        lineGridGeometry.worldMatrix.setIdentity();
         // todo set view matrix to identity
+        viewMatrix.setIdentity();
         // todo set the projection matrix using values from online guide
-
+        projectionMatrix.setPerspective(45, 1.5, 0.1, 1000);
         // todo bind and map(gl.vertexAttribPointer) the buffers
-
+        lineGridGeometry.worldMatrix.setTranslation(0,0,-7);
+        gl.bindBuffer(gl.ARRAY_BUFFER, lineGridGeometry.positionBuffer);
+        gl.vertexAttribPointer(
+            lineGridGeometry.shaderProgram.vertexPositionAttribute,
+            3,
+            gl.FLOAT,
+            gl.FALSE,
+            0, // stride - used for mixing data in a single buffer, ignore
+            0  // offset - used for mixing data in a single buffer, ignore
+        );
+        
+        gl.bindBuffer(gl.ARRAY_BUFFER, lineGridGeometry.colorBuffer);
+        gl.vertexAttribPointer(
+            lineGridGeometry.shaderProgram.vertexColorAttribute,
+            4,
+            gl.FLOAT,
+            gl.FALSE,
+            0,
+            0
+        );
         // todo - send matrices to shader
-
+        gl.uniformMatrix4fv(shaderProgram.worldMatrixUniform, false, lineGridGeometry.worldMatrix.clone().transpose().elements);
+        gl.uniformMatrix4fv(shaderProgram.viewMatrixUniform, false, viewMatrix.clone().transpose().elements);
+        gl.uniformMatrix4fv(shaderProgram.projectionMatrixUniform, false, projectionMatrix.clone().transpose().elements);
         // --------------------------------------------
         // below is done for you, uncomment when ready
 
-        // gl.uniform1f(shaderProgram.timeUniform, time.secondsElapsedSinceStart);
-        // gl.drawArrays(gl.LINES, 0, lineGridGeometry.bufferItemCount);
+         //gl.uniform1f(shaderProgram.timeUniform, time.secondsElapsedSinceStart);
+         gl.drawArrays(gl.LINES, 0, lineGridGeometry.bufferItemCount);
     }
 
 </script>
