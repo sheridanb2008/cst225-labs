@@ -294,14 +294,14 @@
         
         // specify the horizontal lines
         for (var i = -10; i <= 10; ++i) {
-            linePositions.push(i, -1.0,-10) // (vertex 1: x, y, z) add position for line start point (x value should be i)
-            linePositions.push(i, -1.0, 10)  // (vertex 2: x, y, z) add position for line end point (x value should be i)
+            linePositions.push.apply(linePositions, [i, -1.0, -10]) // (vertex 1: x, y, z) add position for line start point (x value should be i)
+            linePositions.push.apply(linePositions, [i, -1.0, 10])  // (vertex 2: x, y, z) add position for line end point (x value should be i)
         }
 
         // specify the lateral lines
         for (var i = -10; i <= 10; ++i) {
-            linePositions.push(-10,-1, i)// add position for line start point (z value should be i)
-            linePositions.push( 10,-1, i)// add position for line end point (z value should be i)
+            linePositions.push.apply(linePositions, [-10,-1, i])// add position for line start point (z value should be i)
+            linePositions.push.apply(linePositions, [ 10,-1, i])// add position for line end point (z value should be i)
         }
 
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(linePositions), gl.STATIC_DRAW);
