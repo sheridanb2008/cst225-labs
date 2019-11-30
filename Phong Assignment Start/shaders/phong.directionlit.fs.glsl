@@ -15,6 +15,7 @@ void main(void) {
     // 2. normalize the world normal and store in a separate variable
     vec3 normalWorld = normalize(vec3(vWorldNormal));
     // 3. calculate the lambert term
+    float lambert = max(dot(normalLight, normalWorld), 0.0);
 
     // todo - specular contribution
     // 1. in world space, calculate the direction from the surface point to the eye (normalized)
@@ -32,5 +33,5 @@ void main(void) {
     // vec3 specularColor = todo;
     vec3 finalColor = ambient; // + diffuseColor + specularColor;
 
-    gl_FragColor = vec4(normalWorld, 1.0);
+    gl_FragColor = vec4(lambert, lambert, lambert, 1.0);
 }
