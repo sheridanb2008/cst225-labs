@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\data",
+    "\\math",
+    "\\misc",
+    "\\shaders"
+  ],
+  "SelectedNode": "\\shaders\\phong.vs.glsl",
+  "PreviewInSolutionExplorer": false
+}

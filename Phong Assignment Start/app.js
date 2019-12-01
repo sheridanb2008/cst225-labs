@@ -125,7 +125,20 @@ function updateAndRender() {
 
     // todo 
     // add keyboard controls for changing light direction here
-
+    //if (appInput.up) {console.log("here we go")}
+    var movementUp = new Matrix3;
+    var movementLeft = new Matrix3;
+    var movementRight = new Matrix3;
+    var movementDown = new Matrix3;
+    movementRight.setRotationY(1.5 * appInput.right);
+    movementLeft.setRotationY(-1.5 * appInput.left);
+    movementUp.setRotationX(1.5 * appInput.up);
+    movementDown.setRotationX(-1.5 * appInput.down);
+    movementUp.multiplyVector(lightDirection);
+    movementLeft.multiplyVector(lightDirection);
+    movementRight.multiplyVector(lightDirection);
+    movementDown.multiplyVector(lightDirection);
+    
     time.update();
     camera.update(time.deltaTime);
 
