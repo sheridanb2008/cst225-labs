@@ -1,3 +1,4 @@
+// Names Craig Calvert and Brian Sheridan
 'use strict'
 
 var gl;

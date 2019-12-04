@@ -1,3 +1,4 @@
+// Names Craig Calvert and Brian Sheridan
 precision mediump float;
 
 uniform vec3 uLightDirection;
