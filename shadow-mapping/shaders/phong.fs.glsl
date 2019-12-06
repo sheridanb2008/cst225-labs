@@ -45,11 +45,11 @@ void main(void) {
 
     // todo #7
     // Sample from the shadow map texture using the previously calculated lightSpaceUV
-    // vec4 shadowColor = ?
+    shadowColor = texture2D(uShadowTexture, lightSpaceUV);
 
     // todo #9
-    gl_FragColor = vec4(lightSpaceUV.x, lightSpaceUV.y, 0.0, 1.0); // remove this when you are ready to add shadows
-    // gl_FragColor = shadowColor; // used for todo #5
+    // gl_FragColor = vec4(lightSpaceUV.x, lightSpaceUV.y, 0.0, 1.0); // remove this when you are ready to add shadows
+    gl_FragColor = shadowColor; // used for todo #5 & #7
     //if (/* in shadow*/) {
     //   gl_FragColor = vec4(ambient, 1.0);
     //} else {
