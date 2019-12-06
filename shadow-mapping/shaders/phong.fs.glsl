@@ -32,10 +32,10 @@ void main(void) {
     //vec4 lightSpaceNDC = ?
 
     // transform the clip space position into NDC (will already be in NDC for orthographic projection but we do it just in case)
-    //lightSpaceNDC = ?
+    vec4 lightSpaceNDC = uLightVPMatrix * vec4(vWorldPosition,1);
 
     // scale and bias the light-space NDC xy coordinates from [-1, 1] to [0, 1]
-    //vec2 lightSpaceUV = ?
+    vec2 lightSpaceUV = vec2((lightSpaceNDC.x + 1.0) * 0.5, (lightSpaceNDC.y + 1.0) * 0.5);
 
     // todo #8 scale and bias the light-space NDC z coordinate from [-1, 1] to [0, 1]
     //float lightDepth = ?
@@ -48,7 +48,7 @@ void main(void) {
     // vec4 shadowColor = ?
 
     // todo #9
-    gl_FragColor = vec4(finalColor, 1.0); // remove this when you are ready to add shadows
+    gl_FragColor = vec4(lightSpaceUV.x, lightSpaceUV.y, 0.0, 1.0); // remove this when you are ready to add shadows
     // gl_FragColor = shadowColor; // used for todo #5
     //if (/* in shadow*/) {
     //   gl_FragColor = vec4(ambient, 1.0);
