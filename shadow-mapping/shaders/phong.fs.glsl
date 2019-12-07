@@ -32,13 +32,13 @@ void main(void) {
     //vec4 lightSpaceNDC = ?
 
     // transform the clip space position into NDC (will already be in NDC for orthographic projection but we do it just in case)
-    vec4 lightSpaceNDC = uLightVPMatrix * vec4(vWorldPosition,1);
+    vec4 lightSpaceNDC = uLightVPMatrix * vec4(vWorldPosition, 1);
 
     // scale and bias the light-space NDC xy coordinates from [-1, 1] to [0, 1]
     vec2 lightSpaceUV = vec2((lightSpaceNDC.x + 1.0) * 0.5, (lightSpaceNDC.y + 1.0) * 0.5);
 
     // todo #8 scale and bias the light-space NDC z coordinate from [-1, 1] to [0, 1]
-    float lightDepth = (lightSpaceNDC.z + 1.0) / 2.0;
+    float lightDepth = (lightSpaceNDC.z + 1.0) * 0.5;
 
     // use this as part of todo #10
     float bias = 0.004;
@@ -47,13 +47,15 @@ void main(void) {
     // Sample from the shadow map texture using the previously calculated lightSpaceUV
     shadowColor = texture2D(uShadowTexture, lightSpaceUV);
 
+    // gl_FragColor = shadowColor; // used for todo #5 & #7
+    // gl_FragColor = vec4(lightDepth, lightDepth, lightDepth, 1.0); // used for todo #8
+
     // todo #9
     // gl_FragColor = vec4(lightSpaceUV.x, lightSpaceUV.y, 0.0, 1.0); // remove this when you are ready to add shadows
-    // gl_FragColor = shadowColor; // used for todo #5 & #7
-    gl_FragColor = vec4(lightDepth, lightDepth, lightDepth, 1.0); // used for todo #8
-    //if (/* in shadow*/) {
-    //   gl_FragColor = vec4(ambient, 1.0);
-    //} else {
-    //    gl_FragColor = vec4(finalColor, 1.0);
-    //}
+    
+    if (lightDepth > shadowColor.x + bias) {
+      gl_FragColor = vec4(ambient, 1.0);
+    } else {
+       gl_FragColor = vec4(finalColor, 1.0);
+    }
 }
