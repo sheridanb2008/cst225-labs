@@ -11,7 +11,7 @@ varying vec3 vWorldPosition;
 void main(void) {
     // todo - diffuse contribution
     // 1. normalize the light direction and store in a separate variable
-    vec3 normalLight = normalize(vec3(uLightPosition));
+    vec3 normalLight = normalize(vec3(uLightPosition - vWorldPosition));
     // 2. normalize the world normal and store in a separate variable
     vec3 normalWorld = normalize(vec3(vWorldNormal));
     // 3. calculate the lambert term

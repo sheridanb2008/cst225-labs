@@ -13,7 +13,7 @@ var moonGeometry = null;
 var groundGeometry = null;
 
 var projectionMatrix = new Matrix4();
-var lightPosition = new Vector3(0,0, 0.01);
+var lightPosition = new Vector3(0,0,0);
 
 // the shader that will be used by each piece of geometry (they could each use their own shader but in this case it will be the same)
 var phongShaderProgram;
@@ -148,7 +148,7 @@ function createScene() {
 
     // Scaled Images
     starsGeometry.worldMatrix.scale(2.5, 2.5, 2.5);
-    starsGeometry.worldMatrix.translate(0, 1, 0);
+    starsGeometry.worldMatrix.translate(0, 0, 0);
 }
 
 // -------------------------------------------------------------------------
@@ -168,13 +168,13 @@ function updateAndRender() {
     moonGeometry.worldMatrix.setRotationY(degrees)
     
     earthGeometry.worldMatrix.scale(0.09, 0.09, 0.09);
-    earthGeometry.worldMatrix.translate(40 * Math.cos(degrees * 0.05), 1, 40 * Math.sin(degrees * 0.05));
+    earthGeometry.worldMatrix.translate(40 * Math.cos(degrees * 0.05), 0, 40 * Math.sin(degrees * 0.05));
 
     sunGeometry.worldMatrix.scale(0.15, 0.15, 0.15);
-    sunGeometry.worldMatrix.translate(0, 1, 0);
+    sunGeometry.worldMatrix.translate(0, 0, 0);
 
     moonGeometry.worldMatrix.scale(0.02, 0.02, 0.02);
-    moonGeometry.worldMatrix.translate((earthGeometry.worldMatrix.getElement(0, 3) + (10 * Math.sin(degrees * 0.1))), 1, (earthGeometry.worldMatrix.getElement(2, 3)) +(10 * Math.cos(degrees * 0.1)));
+    moonGeometry.worldMatrix.translate((earthGeometry.worldMatrix.getElement(0, 3) + (10 * Math.sin(degrees * 0.1))), 0, (earthGeometry.worldMatrix.getElement(2, 3)) +(10 * Math.cos(degrees * 0.1)));
 
     
     
