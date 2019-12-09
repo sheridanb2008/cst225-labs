@@ -1,5 +1,5 @@
 'use strict'
-
+// Authors:Craig Calvert and Brian Sheridan
 var gl;
 
 var appInput = new Input();

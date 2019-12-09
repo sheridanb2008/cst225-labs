@@ -1,3 +1,4 @@
+// Authors:Craig Calvert and Brian Sheridan
 precision mediump float;
 
 uniform sampler2D uAlbedoTexture;

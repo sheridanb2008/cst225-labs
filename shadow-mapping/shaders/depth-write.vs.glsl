@@ -1,4 +1,4 @@
-
+// Authors:Craig Calvert and Brian Sheridan
     attribute vec3 aVertexPosition;
 
     uniform mat4 uWorldMatrix;
